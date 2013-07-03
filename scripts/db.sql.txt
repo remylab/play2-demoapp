@@ -1,0 +1,1 @@
+create database meeblio; create user meebadmin with password 'test'; grant all privileges on database meeblio to meebadmin;
