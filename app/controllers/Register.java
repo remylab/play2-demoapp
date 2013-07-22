@@ -24,9 +24,10 @@ public class Register extends Controller {
     public static Result add() {
         Form<RegisterModel> form = registerForm.bindFromRequest();
 
-        form.reject("email", "your email is not pretty");
+        form.reject("email", "test");
 
         if (form.hasErrors()) {
+            form.reject("Please correct errors below");
             return badRequest(views.html.register.render(form));
         } else {
             Member.create(form.get().email, form.get().firstName, form.get().lastName, form.get().password);

@@ -15,21 +15,18 @@
             <h1>Register</h1>
             
             @if(registerForm.hasGlobalErrors) {
-		        Erreur : @registerForm.globalError.message
+		        @registerForm.globalError.message
             }
             
             @if(flash.contains("success")) {
                 <p class="success">
                     @flash.get("success")
                 </p>
-            } else {	            
-	            <p>
-	            @inputText(
-	                registerForm("email"), 
-	                '_label -> "Email", 
-	                '_error -> registerForm.globalError
-	            )
-	            </p>
+            } else {	
+                <p>
+                    <input type="text" name="email" placeholder="Email" value="@registerForm("email").value">
+                    @if( registerForm.error("email") != null) { @registerForm.error("email").message }
+                </p>
 	            <p><input type="text" name="firstName" placeholder="FirstName" value="@registerForm("firstName").value"></p>
 	            <p><input type="text" name="lastName" placeholder="LastName" value="@registerForm("lastName").value"></p>
 	            <p><input type="password" name="password" placeholder="Password"></p>
