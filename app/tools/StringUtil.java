@@ -295,14 +295,10 @@ public class StringUtil {
         return out;
     }
 
-    public static String getMd5(String s) {
-        return getMd5(s, "");
-    }
-
-    public static String getMd5(String s, String seed) {
+    public static String encrypt(String algo, String secret, String seed) {
 
         String ret = "";
-        String se = s + seed;
+        String se = secret + seed;
 
         byte[] defaultBytes = se.getBytes();
         try {
