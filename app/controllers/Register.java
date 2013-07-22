@@ -1,12 +1,9 @@
 package controllers;
 
-import java.util.ArrayList;
-
 import models.Member;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import tools.StringUtil;
 
 public class Register extends Controller {
 
@@ -22,23 +19,12 @@ public class Register extends Controller {
         public String firstName;
         public String lastName;
         public String password;
-
-        public String validate() {
-            ArrayList<String> errors = new ArrayList<String>();
-            if (StringUtil.isEmpty(email)) {
-                return "email is required";
-            }
-
-            if (Member.find.where().eq("email", email).findUnique() != null) {
-                return "email already used";
-            }
-
-            return null;
-        }
     }
 
     public static Result add() {
         Form<RegisterModel> form = registerForm.bindFromRequest();
+
+        form.reject("email", "your email is not pretty");
 
         if (form.hasErrors()) {
             return badRequest(views.html.register.render(form));

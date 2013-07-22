@@ -1,4 +1,6 @@
-@(form: Form[Register.RegisterModel])
+@(registerForm: Form[Register.RegisterModel])
+
+@import helper._
 
 <html>
     <head>
@@ -12,8 +14,8 @@
         @helper.form(routes.Register.add) {
             <h1>Register</h1>
             
-            @if(form.hasGlobalErrors) {
-		        Erreur : @form.globalError.message
+            @if(registerForm.hasGlobalErrors) {
+		        Erreur : @registerForm.globalError.message
             }
             
             @if(flash.contains("success")) {
@@ -21,9 +23,15 @@
                     @flash.get("success")
                 </p>
             } else {	            
-	            <p><input type="email" name="email" placeholder="Email" value="@form("email").value"></p>
-	            <p><input type="text" name="firstName" placeholder="FirstName" value="@form("firstName").value"></p>
-	            <p><input type="text" name="lastName" placeholder="LastName" value="@form("lastName").value"></p>
+	            <p>
+	            @inputText(
+	                registerForm("email"), 
+	                '_label -> "Email", 
+	                '_error -> registerForm.globalError
+	            )
+	            </p>
+	            <p><input type="text" name="firstName" placeholder="FirstName" value="@registerForm("firstName").value"></p>
+	            <p><input type="text" name="lastName" placeholder="LastName" value="@registerForm("lastName").value"></p>
 	            <p><input type="password" name="password" placeholder="Password"></p>
 	            <p><button type="submit">register</button></p>
             }
