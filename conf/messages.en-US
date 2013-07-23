@@ -1,0 +1,9 @@
+
+views.register.title=Register
+
+register.form.required=This field is required
+register.form.email.notavailable=This email is already used
+register.form.success=A confirmation email has been sent {0}
+
+register.form.passwordval=Confirm Password does not match password
+register.form.invalid=Invalid form, please see error(s) below

@@ -4,15 +4,15 @@
 
 <html>
     <head>
-        <title>Register</title>
+        <title>@msg("views.register.title")</title>
     </head>
     <body>
         <header>
             <a href="@routes.Application.index" id="logo">Home</a>
         </header>
         
+        
         @helper.form(routes.Register.add) {
-            <h1>Register</h1>
             
             @if(registerForm.hasGlobalErrors) {
 		        @registerForm.globalError.message
@@ -27,9 +27,23 @@
                     <input type="text" name="email" placeholder="Email" value="@registerForm("email").value">
                     @if( registerForm.error("email") != null) { @registerForm.error("email").message }
                 </p>
-	            <p><input type="text" name="firstName" placeholder="FirstName" value="@registerForm("firstName").value"></p>
-	            <p><input type="text" name="lastName" placeholder="LastName" value="@registerForm("lastName").value"></p>
-	            <p><input type="password" name="password" placeholder="Password"></p>
+                <p>
+                    <input type="text" name="firstName" placeholder="firstName" value="@registerForm("firstName").value">
+                    @if( registerForm.error("firstName") != null) { @registerForm.error("firstName").message }
+                </p>
+                <p>
+                    <input type="text" name="lastName" placeholder="lastName" value="@registerForm("lastName").value">
+                    @if( registerForm.error("lastName") != null) { @registerForm.error("lastName").message }
+                </p>
+                <p>
+                    <input type="password" name="password" placeholder="password" value="">
+                    @if( registerForm.error("password") != null) { @registerForm.error("password").message }
+                </p>
+                <p>
+                    <input type="password" name="passwordval" placeholder="password confirmation" value="">
+                    @if( registerForm.error("passwordval") != null) { @registerForm.error("passwordval").message }
+                </p>
+                
 	            <p><button type="submit">register</button></p>
             }
         }
