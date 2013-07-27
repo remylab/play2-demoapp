@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Member;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
@@ -7,7 +8,12 @@ import views.html.index;
 public class Application extends Controller {
 
     public static Result index() {
-        return ok(index.render("Your new application is ready."));
+        session().clear();
+        return ok(index.render(getUser()));
+    }
+
+    private static Member getUser() {
+        return (Member.find.where().eq("email", session("email")).findUnique());
     }
 
 }

@@ -1,7 +1,16 @@
-@(message: String)
+@(member: Member)
+
+@fullName() = @{
+	if (member != null) {
+		member.getFirstName() + " " + member.getLastName();
+	} else {
+		"Guest"
+	}
+}
 
 @main("Demo app") {
     
-    <h1>Hello demo!</h1>
+    <h1>Hello @fullName()</h1>
+
     
 }
