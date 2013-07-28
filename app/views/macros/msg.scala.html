@@ -1,8 +1,4 @@
 @(text: String)
 @import tools.LanguageUtil;
 
-@msg(s: String) = @{
-	LanguageUtil.message(session,s)
-}
-
-@msg(text)
+LanguageUtil.message(session,text)

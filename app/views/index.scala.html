@@ -1,14 +1,32 @@
 @(member: Member)
 
+@import controllers.Login;
+
 @fullName() = @{
 	if (member != null) {
-		member.getFirstName() + " " + member.getLastName();
+		member.firstName + " " + member.lastName
 	} else {
 		"Guest"
 	}
 }
 
 @main("Demo app") {
+
+    <header>
+        <a href="@routes.Register.index()" id="logo">Register</a>
+    </header>
+        
+    @helper.form(routes.Login.authenticate) {
+		@if(flash.contains("errorLogin")) {
+			<p>Invalid username or password</p>
+		}
+    	<input type="email" name="email" placeholder="Email" value="">
+    	<input type="password" name="password" placeholder="Password">
+    	<button type="submit">Login</button>
+    }
+    @helper.form(routes.Logout.logout) {
+    	<button type="submit">Logout</button>
+    }  
     
     <h1>Hello @fullName()</h1>
 

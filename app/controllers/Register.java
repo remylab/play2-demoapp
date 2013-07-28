@@ -13,7 +13,6 @@ public class Register extends ControllerExtended {
     private final static Form<RegisterModel> registerForm = new Form<RegisterModel>(RegisterModel.class);
 
     public static Result index() {
-        session("lang", "fr");
         return ok(views.html.register.render(registerForm));
     }
 
@@ -58,7 +57,7 @@ public class Register extends ControllerExtended {
         } else {
             Member.create(form.get().email, form.get().firstName, form.get().lastName, form.get().password);
             flash("success", message("register.form.success", form.get().email));
-            session("email", form.get().email);
+            Application.onLogin(form.get().email);
             return redirect(routes.Register.index());
         }
     }

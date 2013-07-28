@@ -25,14 +25,16 @@ public class Member extends Model {
     }
 
     public static Member create(String email, String firstName, String lastName, String password) {
-        String encryptedPass = StringUtil.encrypt("SHA1", password, passwordSeed);
-        Member member = new Member(email, firstName, lastName, encryptedPass);
+        Member member = new Member(email, firstName, lastName, getStoredPassword(password));
         member.save();
         return member;
     }
 
     public static Member authenticate(String email, String password) {
-        String encryptedPass = StringUtil.encrypt("SHA1", password, passwordSeed);
-        return find.where().eq("email", email).eq("password", encryptedPass).findUnique();
+        return find.where().eq("email", email).eq("password", getStoredPassword(password)).findUnique();
+    }
+
+    private static String getStoredPassword(String s) {
+        return StringUtil.encrypt("SHA1", s, passwordSeed);
     }
 }
