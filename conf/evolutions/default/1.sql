@@ -8,6 +8,8 @@ create table member (
   first_name                varchar(255),
   last_name                 varchar(255),
   password                  varchar(255),
+  active                    boolean,
+  confirmation_token        varchar(255),
   constraint pk_member primary key (email))
 ;
 

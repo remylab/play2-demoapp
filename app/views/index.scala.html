@@ -28,6 +28,9 @@
     	<button type="submit">Logout</button>
     }  
     
+    @if(flash.contains("firstVisit")) {
+    	*** 1st visit ***
+    }
     <h1>Hello @fullName()</h1>
 
     

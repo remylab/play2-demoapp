@@ -25,6 +25,14 @@ public class Register extends ControllerExtended {
         public String passwordval;
     }
 
+    public static Result confirmation(String email, String token) {
+        if (Member.confirmToken(email, token) != null) {
+            flash("firstVisit", "");
+            Application.onLogin(email);
+        }
+        return redirect(routes.Application.index());
+    }
+
     public static Result add() {
         Form<RegisterModel> form = registerForm.bindFromRequest();
 
@@ -55,9 +63,8 @@ public class Register extends ControllerExtended {
             form.reject(message("register.form.invalid"));
             return badRequest(views.html.register.render(form));
         } else {
-            Member.create(form.get().email, form.get().firstName, form.get().lastName, form.get().password);
-            flash("success", message("register.form.success", form.get().email));
-            Application.onLogin(form.get().email);
+            Member newMember = Member.create(form.get().email, form.get().firstName, form.get().lastName, form.get().password);
+            flash("emailConfirmation", message("register.form.emailConfirmation", "/confirmation/" + newMember.email + "/" + newMember.confirmationToken));
             return redirect(routes.Register.index());
         }
     }

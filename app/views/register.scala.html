@@ -19,10 +19,8 @@
 		        @registerForm.globalError.message
             }
             
-            @if(flash.contains("success")) {
-                <p class="success">
-                    @flash.get("success")
-                </p>
+            @if(flash.contains("emailConfirmation")) {
+                <p>@flash.get("emailConfirmation")</p>
             } else {	
                 <p>
                     <input type="text" name="email" placeholder="Email" value="@registerForm("email").value">

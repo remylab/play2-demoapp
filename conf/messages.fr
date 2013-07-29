@@ -4,6 +4,7 @@ views.register.title=S''enregistrer
 register.form.required=Ce champs est requis
 register.form.email.notavailable=Ce courriel est déja utilisé
 register.form.success=Un courriel a 'ét'é envoy'é a l''adresse suivante ': {0}
+register.form.emailConfirmation=Veuillez cliquez le lien suivant : {0} pour confirmer votre inscription
 
 register.form.passwordval=Le mot de passe de confirmation diffère du mot de passe
 register.form.invalid=Formulaire invalide, voir erreur(s) ci-dessous
