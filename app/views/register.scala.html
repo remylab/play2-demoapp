@@ -1,4 +1,4 @@
-@(registerForm: Form[Register.RegisterModel])
+@(registerForm: Form[Membership.RegisterModel])
 
 @import helper._
 @import macros._
@@ -13,7 +13,7 @@
         </header>
         
         
-        @helper.form(routes.Register.add) {
+        @helper.form(routes.Membership.addMember) {
             
             @if(registerForm.hasGlobalErrors) {
 		        @registerForm.globalError.message

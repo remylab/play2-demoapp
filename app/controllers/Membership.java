@@ -7,14 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import play.data.Form;
 import play.mvc.Result;
 import tools.StringUtil;
+import controllers.Membership.LoginModel;
+import controllers.Membership.RegisterModel;
 
-public class Register extends ControllerExtended {
+public class Membership extends ControllerExtended {
 
     private final static Form<RegisterModel> registerForm = new Form<RegisterModel>(RegisterModel.class);
-
-    public static Result index() {
-        return ok(views.html.register.render(registerForm));
-    }
+    public final static Form<LoginModel> loginForm = new Form<LoginModel>(LoginModel.class);
 
     public static class RegisterModel {
 
@@ -25,15 +24,42 @@ public class Register extends ControllerExtended {
         public String passwordval;
     }
 
+    public static class LoginModel {
+
+        public String email;
+        public String password;
+
+    }
+
+    public static Result register() {
+        return ok(views.html.register.render(registerForm));
+    }
+
     public static Result confirmation(String email, String token) {
         if (Member.confirmToken(email, token) != null) {
-            flash("firstVisit", "");
+            flash("confirmationSuccess", "");
             Application.onLogin(email);
         }
         return redirect(routes.Application.index());
     }
 
-    public static Result add() {
+    public static Result authenticate() {
+        Form<LoginModel> form = loginForm.bindFromRequest();
+
+        if (Member.authenticate(form.get().email, form.get().password) == null) {
+            flash("errorLogin", "");
+        } else {
+            Application.onLogin(form.get().email);
+        }
+        return redirect(routes.Application.index());
+    }
+
+    public static Result logout() {
+        Application.onLogout();
+        return redirect(routes.Application.index());
+    }
+
+    public static Result addMember() {
         Form<RegisterModel> form = registerForm.bindFromRequest();
 
         if (StringUtil.isEmpty(form.get().email)) {
@@ -64,8 +90,8 @@ public class Register extends ControllerExtended {
             return badRequest(views.html.register.render(form));
         } else {
             Member newMember = Member.create(form.get().email, form.get().firstName, form.get().lastName, form.get().password);
-            flash("emailConfirmation", message("register.form.emailConfirmation", "/confirmation/" + newMember.email + "/" + newMember.confirmationToken));
-            return redirect(routes.Register.index());
+            flash("emailConfirmation", message("register.form.emailConfirmation", "http://" + request().host() + "/confirmation/" + newMember.email + "/" + newMember.confirmationToken));
+            return redirect(routes.Membership.register());
         }
     }
 }

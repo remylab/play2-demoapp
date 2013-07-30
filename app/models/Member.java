@@ -27,7 +27,7 @@ public class Member extends Model {
         this.lastName = lastName;
         this.password = password;
         this.active = false;
-        this.confirmationToken = RandomStringUtils.randomAlphanumeric(20);
+        this.confirmationToken = RandomStringUtils.randomAlphanumeric(40);
     }
 
     public static Member create(String email, String firstName, String lastName, String password) {
@@ -50,6 +50,7 @@ public class Member extends Model {
     }
 
     public static Member authenticate(String email, String password) {
+        System.out.println("try email, pass : " + email + ", " + getStoredPassword(password));
         return find.where().eq("email", email)
                 .eq("password", getStoredPassword(password))
                 .eq("active", true)
