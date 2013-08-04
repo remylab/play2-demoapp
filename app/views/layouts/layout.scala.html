@@ -1,0 +1,40 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@title</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <script type="text/javascript" src="/public/javascripts/jquery-1.9.0.min.js"></script>
+        <script type="text/javascript" src="@routes.Application.jsRoutes()"></script>
+		<script type="text/javascript">
+        $(function(){
+
+            $(".addGroup").bind('click',function() {
+            	var email = $(this).attr('data-email');
+            	var name = $('.groupName').val();
+            	var invitations = $('.invitations').val();
+    	        jsRoutes.controllers.Group.add().ajax({
+    	        	context: this,
+    	        	data:{
+    	        		email:email,
+    	        		name:name,
+    	        		invitations:invitations
+    	        	},
+    	        	success:function(data, textStatus, jqXHR) {
+    	        		$('#groupAddResult').html(data);
+    	        	},
+    	        	error:function() {
+    	        		alert("oups..");
+    	        	}
+    	        });
+            });
+        	
+        })
+		</script>
+    </head>
+    <body>
+        @content
+    </body>
+</html>

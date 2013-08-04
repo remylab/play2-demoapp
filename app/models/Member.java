@@ -50,7 +50,6 @@ public class Member extends Model {
     }
 
     public static Member authenticate(String email, String password) {
-        System.out.println("try email, pass : " + email + ", " + getStoredPassword(password));
         return find.where().eq("email", email)
                 .eq("password", getStoredPassword(password))
                 .eq("active", true)

@@ -3,6 +3,20 @@
 
 # --- !Ups
 
+create table invitation (
+  id                        bigint not null,
+  group_id                  bigint,
+  member_email              varchar(255),
+  confirmation_token        varchar(255),
+  constraint pk_invitation primary key (id))
+;
+
+create table mgroup (
+  id                        bigint not null,
+  name                      varchar(255),
+  constraint pk_mgroup primary key (id))
+;
+
 create table member (
   email                     varchar(255) not null,
   first_name                varchar(255),
@@ -13,14 +27,40 @@ create table member (
   constraint pk_member primary key (email))
 ;
 
+
+create table mgroup_member (
+  mgroup_id                      bigint not null,
+  member_email                   varchar(255) not null,
+  constraint pk_mgroup_member primary key (mgroup_id, member_email))
+;
+create sequence invitation_seq;
+
+create sequence mgroup_seq;
+
 create sequence member_seq;
 
+alter table invitation add constraint fk_invitation_group_1 foreign key (group_id) references mgroup (id);
+create index ix_invitation_group_1 on invitation (group_id);
 
 
+
+alter table mgroup_member add constraint fk_mgroup_member_mgroup_01 foreign key (mgroup_id) references mgroup (id);
+
+alter table mgroup_member add constraint fk_mgroup_member_member_02 foreign key (member_email) references member (email);
 
 # --- !Downs
 
+drop table if exists invitation cascade;
+
+drop table if exists mgroup cascade;
+
+drop table if exists mgroup_member cascade;
+
 drop table if exists member cascade;
+
+drop sequence if exists invitation_seq;
+
+drop sequence if exists mgroup_seq;
 
 drop sequence if exists member_seq;
 

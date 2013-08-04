@@ -10,6 +10,10 @@ GET     /confirmation/:email/:token 	controllers.Membership.confirmation(email :
 POST    /login                  		controllers.Membership.authenticate()
 POST    /logout                  		controllers.Membership.logout()
 
+# JS ROUTES
+POST    /group                			controllers.Group.add()
+GET     /public/javascript/routes       controllers.Application.jsRoutes()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               	controllers.Assets.at(path="/public", file)
 GET     /public/*file               	controllers.Assets.at(path="/public", file)

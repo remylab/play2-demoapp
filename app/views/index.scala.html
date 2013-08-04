@@ -1,6 +1,7 @@
 @(member: Member)
 
 @import controllers.Membership;
+@import layouts._
 
 @fullName() = @{
 	if (member != null) {
@@ -10,7 +11,7 @@
 	}
 }
 
-@main("Demo app") {
+@layout("Demo app") {
 
     <header>
         <a href="@routes.Membership.register()" id="logo">Register</a>
@@ -24,6 +25,7 @@
     	<input type="password" name="password" placeholder="Password">
     	<button type="submit">Login</button>
     }
+    
     @helper.form(routes.Membership.logout) {
     	<button type="submit">Logout</button>
     }  
@@ -32,6 +34,13 @@
     	*** 1st visit ***
     }
     <h1>Hello @fullName()</h1>
+    
+    @if(member != null) {
+    	<textarea class="invitations" placeholder="bob@@example.com john@@example.com"></textarea>
+    	<input type="text" class="groupName" placeholder="group name" value="">
+    	<button class="addGroup" data-email="@member.email">Add a group</button>
+    	<div id="groupAddResult"></div>
+    }
 
     
 }
