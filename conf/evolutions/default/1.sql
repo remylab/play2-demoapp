@@ -6,8 +6,9 @@
 create table invitation (
   id                        bigint not null,
   group_id                  bigint,
-  member_email              varchar(255),
+  email                     varchar(255),
   confirmation_token        varchar(255),
+  sender_email              varchar(255),
   constraint pk_invitation primary key (id))
 ;
 
@@ -41,6 +42,8 @@ create sequence member_seq;
 
 alter table invitation add constraint fk_invitation_group_1 foreign key (group_id) references mgroup (id);
 create index ix_invitation_group_1 on invitation (group_id);
+alter table invitation add constraint fk_invitation_sender_2 foreign key (sender_email) references member (email);
+create index ix_invitation_sender_2 on invitation (sender_email);
 
 
 

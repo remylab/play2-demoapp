@@ -49,6 +49,12 @@ public class Member extends Model {
         return member;
     }
 
+    public static Member findByEmail(String email) {
+        return find.where().eq("email", email)
+                .eq("active", true)
+                .findUnique();
+    }
+
     public static Member authenticate(String email, String password) {
         return find.where().eq("email", email)
                 .eq("password", getStoredPassword(password))

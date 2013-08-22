@@ -1,0 +1,19 @@
+@(sender: Member)
+
+@import helper._
+@import macros._
+
+<html>
+    <head>
+        <title>@msg("views.register.title")</title>
+    </head>
+    <body>
+        <header>
+            <a href="@routes.Application.index" id="logo">Home</a>
+        </header>
+        
+    	Invitation sent by @sender.firstName @sender.lastName
+        
+    </body>
+</html>
+

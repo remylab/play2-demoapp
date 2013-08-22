@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -17,29 +18,40 @@ public class Invitation extends Model {
     public long id;
     @ManyToOne(cascade = CascadeType.REMOVE)
     public MGroup group;
-    public String memberEmail;
+    public String email;
     public String confirmationToken;
+    @OneToOne
+    public Member sender;
 
-    public Invitation(MGroup group, String email) {
+    public Invitation(Member member, MGroup group, String email) {
         this.group = group;
-        this.memberEmail = email;
+        this.email = email;
         this.confirmationToken = RandomStringUtils.randomAlphanumeric(40);
+        this.sender = member; // member who sent the invitation
     }
 
-    public static Invitation create(Long groupId, String email) {
-        if (!invitationExists(groupId, email)) {
-            Invitation invitation = new Invitation(MGroup.find.ref(groupId), email);
+    public static Invitation create(Member member, Long groupId, String email) {
+        if (findInvitationByEmail(groupId, email) == null) {
+            Invitation invitation = new Invitation(member, MGroup.find.ref(groupId), email);
             invitation.save();
             return invitation;
         }
         return null;
     }
 
-    private static boolean invitationExists(Long groupId, String email) {
-        if (find.where().eq("memberEmail", email).where().eq("group.id", groupId).findUnique() != null) {
-            System.out.println("INFO : invitation exists for " + groupId + "/" + email);
-            return true;
+    private static Invitation findInvitationByEmail(Long groupId, String email) {
+        Invitation invit = find.where().eq("email", email).where().eq("group.id", groupId).findUnique();
+        if (invit != null) {
+            return invit;
         }
-        return false;
+        return null;
+    }
+
+    public static Invitation findInvitationByToken(Long groupId, String token) {
+        Invitation invit = find.where().eq("confirmationToken", token).where().eq("group.id", groupId).findUnique();
+        if (invit != null) {
+            return invit;
+        }
+        return null;
     }
 }
