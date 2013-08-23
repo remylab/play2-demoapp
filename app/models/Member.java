@@ -1,10 +1,14 @@
 package models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import tools.StringUtil;
 
@@ -14,6 +18,11 @@ public class Member extends Model {
     public static Finder<String, Member> find = new Finder<String, Member>(String.class, Member.class);
 
     @Id
+    public long id;
+    @Email
+    @Required
+    @MinLength(4)
+    @Column(unique = true)
     public String email;
     public String firstName;
     public String lastName;

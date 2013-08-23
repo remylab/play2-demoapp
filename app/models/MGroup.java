@@ -26,8 +26,15 @@ public class MGroup extends Model {
     }
 
     public static MGroup create(String name, String ownerEmail) {
-        MGroup group = new MGroup(name, Member.find.ref(ownerEmail));
+        MGroup group = new MGroup(name, Member.findByEmail(ownerEmail));
         group.save();
+        group.saveManyToManyAssociations("members");
+        return group;
+    }
+
+    public static MGroup add(Long id, Member member) {
+        MGroup group = find.ref(id);
+        group.members.add(member);
         group.saveManyToManyAssociations("members");
         return group;
     }

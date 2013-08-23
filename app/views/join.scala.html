@@ -1,18 +1,74 @@
-@(sender: Member)
+@(invit: Invitation , invited: Member, registerForm: Form[Group.AcceptModel])
 
 @import helper._
 @import macros._
 
 <html>
     <head>
-        <title>@msg("views.register.title")</title>
+        <title>Invitation</title>
     </head>
     <body>
         <header>
             <a href="@routes.Application.index" id="logo">Home</a>
         </header>
         
-    	Invitation sent by @sender.firstName @sender.lastName
+    	@invit.sender.firstName @invit.sender.lastName, invited you to join the group "@invit.group.name"
+    	<br/>
+    	@if( invited != null ) {
+    		To accept this invitation, please enter your password and press "submit".
+    	} else {
+    		To accept this invitation you need to create a member.
+    	}
+    	<br/>
+        @helper.form(routes.Group.accept) {
+            
+            @if(registerForm.hasGlobalErrors) {
+		        @registerForm.globalError.message
+            }
+            
+           	<input type="hidden" name="groupId" value="@invit.group.id">	
+           	<input type="hidden" name="invitationId" value="@invit.id">	
+           	
+            @if( invited != null ) {
+            
+	            <p>
+	                <input type="text" name="email" readonly value="@invited.email">
+	                @if( registerForm.error("email") != null) { @registerForm.error("email").message }
+	            </p>
+	            <p>
+	                <input type="password" name="password" placeholder="password" value="">
+	                @if( registerForm.error("password") != null) { @registerForm.error("password").message }
+	            </p>
+               
+            } else {
+            
+	            <input type="hidden" name="newMember" value="true">
+	            <p>
+	                <input type="text" name="email" readonly value="@invit.email">
+	                @if( registerForm.error("email") != null) { @registerForm.error("email").message }
+	            </p>
+	            <p>
+	                <input type="text" name="firstName" placeholder="firstName" value="@registerForm("firstName").value">
+	                @if( registerForm.error("firstName") != null) { @registerForm.error("firstName").message }
+	            </p>
+	            <p>
+	                <input type="text" name="lastName" placeholder="lastName" value="@registerForm("lastName").value">
+	                @if( registerForm.error("lastName") != null) { @registerForm.error("lastName").message }
+	            </p>
+	            <p>
+	                <input type="password" name="password" placeholder="password" value="">
+	                @if( registerForm.error("password") != null) { @registerForm.error("password").message }
+	            </p>
+	            <p>
+	                <input type="password" name="passwordval" placeholder="password confirmation" value="">
+	                @if( registerForm.error("passwordval") != null) { @registerForm.error("passwordval").message }
+	            </p>
+            }
+               
+			<p><button type="submit">submit</button></p>
+               
+       }
+    	
         
     </body>
 </html>

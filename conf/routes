@@ -9,7 +9,8 @@ POST    /register                  		controllers.Membership.addMember()
 GET     /confirmation/:email/:token 	controllers.Membership.confirmation(email :String, token :String)
 POST    /login                  		controllers.Membership.authenticate()
 POST    /logout                  		controllers.Membership.logout()
-GET     /invitation/:id/:token 			controllers.Group.invitation(id :Long, token :String) 
+GET     /group/invitation/:id/:token 	controllers.Group.invitation(id :Long, token :String) 
+POST 	/group/accept					controllers.Group.accept()		
 
 # JS ROUTES
 POST    /group                			controllers.Group.add()

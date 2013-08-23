@@ -7,8 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import play.data.Form;
 import play.mvc.Result;
 import tools.StringUtil;
-import controllers.Membership.LoginModel;
-import controllers.Membership.RegisterModel;
 
 public class Membership extends ControllerExtended {
 
@@ -37,7 +35,7 @@ public class Membership extends ControllerExtended {
 
     public static Result confirmation(String email, String token) {
         if (Member.confirmToken(email, token) != null) {
-            flash("confirmationSuccess", "");
+            flash("registrationSuccess", "");
             Application.onLogin(email);
         }
         return redirect(routes.Application.index());
@@ -59,6 +57,11 @@ public class Membership extends ControllerExtended {
         return redirect(routes.Application.index());
     }
 
+    /**
+     * Register a new member
+     * 
+     * @return
+     */
     public static Result addMember() {
         Form<RegisterModel> form = registerForm.bindFromRequest();
 
@@ -68,10 +71,10 @@ public class Membership extends ControllerExtended {
             form.reject("email", message("register.form.email.notavailable"));
         }
 
-        if (StringUtil.isEmpty(form.get().password)) {
+        if (StringUtil.isEmpty(form.get().firstName)) {
             form.reject("firstName", message("register.form.required"));
         }
-        if (StringUtil.isEmpty(form.get().password)) {
+        if (StringUtil.isEmpty(form.get().lastName)) {
             form.reject("lastName", message("register.form.required"));
         }
         if (StringUtil.isEmpty(form.get().password)) {
@@ -93,5 +96,9 @@ public class Membership extends ControllerExtended {
             flash("emailConfirmation", message("register.form.emailConfirmation", "http://" + request().host() + "/confirmation/" + newMember.email + "/" + newMember.confirmationToken));
             return redirect(routes.Membership.register());
         }
+    }
+
+    public static Member getUser() {
+        return (Member.find.where().eq("email", session("email")).findUnique());
     }
 }
