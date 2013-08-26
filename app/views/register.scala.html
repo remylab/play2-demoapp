@@ -2,9 +2,12 @@
 
 @import helper._
 @import layouts._
+@import tools._
 @import tags._
 
 @head = {}
+
+@Chelper.setBool("noLoginBar",true)
 
 @layout( "views.register.title" )(head) {
 	

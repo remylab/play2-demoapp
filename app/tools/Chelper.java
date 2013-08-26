@@ -25,4 +25,16 @@ public class Chelper {
     public static Member member() {
         return (Member) Http.Context.current().args.get(BaseAction.MEMBER);
     }
+
+    public static boolean getBool(String key) {
+        Object val = Http.Context.current().args.get(key);
+        if (val != null) {
+            return (Boolean) Http.Context.current().args.get(key);
+        }
+        return false;
+    }
+
+    public static void setBool(String key, Boolean value) {
+        Http.Context.current().args.put(key, value);
+    }
 }

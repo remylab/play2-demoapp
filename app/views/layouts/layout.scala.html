@@ -23,29 +23,33 @@
         
     </head>
     <body>
-    
+        
 		<header>
 		    <a href="@routes.Application.index" id="logo">Home</a>
 		</header>
-		
-	    @if(Chelper.member() != null) {
-	    	
-		    @helper.form(routes.Membership.logout) {
-		    	<a href="@routes.Membership.profile()" >@fullName()</a><button type="submit">Logout</button>
-		    } 
-		    
-	    } else {
-		    @helper.form(routes.Membership.authenticate) {
-		    	<a href="@routes.Membership.register()" >Register</a>
-		    	
-				@if(flash.contains("errorLogin")) {
-					<p>Invalid username or password</p>
-				}
-		    	<input type="email" name="email" placeholder="Email" value="">
-		    	<input type="password" name="password" placeholder="Password">
-		    	<button type="submit">Login</button>
-		    }
-	    }
+        
+        
+        @if( ! Chelper.getBool("noLoginBar") == true ) {
+
+    	    @if(Chelper.member() != null) {
+    	    	
+    		    @helper.form(routes.Membership.logout) {
+    		    	<a href="@routes.Membership.profile()" >@fullName()</a><button type="submit">Logout</button>
+    		    } 
+    		    
+    	    } else {
+    		    @helper.form(routes.Membership.authenticate) {
+    		    	<a href="@routes.Membership.register()" >Register</a>
+    		    	
+    				@if(flash.contains("errorLogin")) {
+    					<p>Invalid username or password</p>
+    				}
+    		    	<input type="email" name="email" placeholder="Email" value="">
+    		    	<input type="password" name="password" placeholder="Password">
+    		    	<button type="submit">Login</button>
+    		    }
+    	    }
+        }
     
         @content
         
