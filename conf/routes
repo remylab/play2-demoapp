@@ -6,11 +6,13 @@
 GET     /                           	controllers.Application.index()
 GET     /register                  		controllers.Membership.register()
 POST    /register                  		controllers.Membership.addMember()
-GET     /confirmation/:email/:token 	controllers.Membership.confirmation(email :String, token :String)
 POST    /login                  		controllers.Membership.authenticate()
 POST    /logout                  		controllers.Membership.logout()
+GET     /profile                  		controllers.Membership.profile()
+
+GET     /confirmation/:email/:token 	controllers.Membership.confirmation(email :String, token :String)	
 GET     /group/invitation/:id/:token 	controllers.Group.invitation(id :Long, token :String) 
-POST 	/group/accept					controllers.Group.accept()		
+POST 	/group/accept					controllers.Group.accept()	
 
 # JS ROUTES
 POST    /group                			controllers.Group.add()

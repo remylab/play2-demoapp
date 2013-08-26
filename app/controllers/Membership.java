@@ -1,11 +1,16 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import models.MGroup;
 import models.Member;
 
 import org.apache.commons.lang3.StringUtils;
 
 import play.data.Form;
 import play.mvc.Result;
+import play.mvc.Security;
 import tools.StringUtil;
 
 public class Membership extends ControllerExtended {
@@ -31,6 +36,16 @@ public class Membership extends ControllerExtended {
 
     public static Result register() {
         return ok(views.html.register.render(registerForm));
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result profile() {
+        Member member = Membership.getUser();
+        List<MGroup> groups = new ArrayList<MGroup>();
+        if (member != null) {
+            groups = MGroup.findInvolving(member);
+        }
+        return ok(views.html.profile.render(member, groups));
     }
 
     public static Result confirmation(String email, String token) {

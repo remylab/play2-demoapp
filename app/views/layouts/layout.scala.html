@@ -1,40 +1,53 @@
-@(title: String)(content: Html)
+@(title: String)(head: Html)(content: Html)
+
+@import tools._
+@import tags._
+
+@fullName() = @{
+	if (Chelper.member() != null) {
+		Chelper.member().firstName + " " + Chelper.member().lastName
+	}
+}
+
 
 <!DOCTYPE html>
 
 <html>
     <head>
-        <title>@title</title>
+        <title>@msg(title)</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <script type="text/javascript" src="/public/javascripts/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="@routes.Application.jsRoutes()"></script>
-		<script type="text/javascript">
-        $(function(){
-
-            $(".addGroup").bind('click',function() {
-            	var email = $(this).attr('data-email');
-            	var name = $('.groupName').val();
-            	var invitations = $('.invitations').val();
-    	        jsRoutes.controllers.Group.add().ajax({
-    	        	context: this,
-    	        	data:{
-    	        		email:email,
-    	        		name:name,
-    	        		invitations:invitations
-    	        	},
-    	        	success:function(data, textStatus, jqXHR) {
-    	        		$('#groupAddResult').html(data);
-    	        	},
-    	        	error:function() {
-    	        		alert("oups..");
-    	        	}
-    	        });
-            });
-        	
-        })
-		</script>
+        
+        @head
+        
     </head>
     <body>
+    
+		<header>
+		    <a href="@routes.Application.index" id="logo">Home</a>
+		</header>
+		
+	    @if(Chelper.member() != null) {
+	    	
+		    @helper.form(routes.Membership.logout) {
+		    	<a href="@routes.Membership.profile()" >@fullName()</a><button type="submit">Logout</button>
+		    } 
+		    
+	    } else {
+		    @helper.form(routes.Membership.authenticate) {
+		    	<a href="@routes.Membership.register()" >Register</a>
+		    	
+				@if(flash.contains("errorLogin")) {
+					<p>Invalid username or password</p>
+				}
+		    	<input type="email" name="email" placeholder="Email" value="">
+		    	<input type="password" name="password" placeholder="Password">
+		    	<button type="submit">Login</button>
+		    }
+	    }
+    
         @content
+        
     </body>
 </html>

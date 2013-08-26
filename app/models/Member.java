@@ -74,4 +74,8 @@ public class Member extends Model {
     private static String getStoredPassword(String s) {
         return StringUtil.encrypt("SHA1", s, passwordSeed);
     }
+
+    public static String getTest() {
+        return "test";
+    }
 }

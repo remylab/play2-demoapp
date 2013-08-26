@@ -1,15 +1,25 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import models.MGroup;
+import models.Member;
 import play.Routes;
-import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 
-public class Application extends Controller {
+public class Application extends ControllerExtended {
 
     public static Result index() {
         session("lang", "fr");
-        return ok(index.render(Membership.getUser()));
+
+        Member member = Membership.getUser();
+        List<MGroup> groups = new ArrayList<MGroup>();
+        if (member != null) {
+            groups = MGroup.findInvolving(member);
+        }
+        return ok(index.render(member, groups));
     }
 
     public static void onLogin(String email) {

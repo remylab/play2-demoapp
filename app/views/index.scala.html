@@ -1,44 +1,55 @@
-@(member: Member)
+@(member: Member, groups: List[MGroup])
 
-@import controllers.Membership;
+@import tools._
 @import layouts._
+@import tags._
 
-@fullName() = @{
-	if (member != null) {
-		member.firstName + " " + member.lastName
-	} else {
-		"Guest"
-	}
+
+@head = {
+	<script type="text/javascript">
+       $(function(){
+
+           $(".addGroup").bind('click',function() {
+           	var email = $(this).attr('data-email');
+           	var name = $('.groupName').val();
+           	var invitations = $('.invitations').val();
+   	        jsRoutes.controllers.Group.add().ajax({
+   	        	context: this,
+   	        	data:{
+   	        		email:email,
+   	        		name:name,
+   	        		invitations:invitations
+   	        	},
+   	        	success:function(data, textStatus, jqXHR) {
+   	        		$('#groupAddResult').html(data);
+   	        	},
+   	        	error:function() {
+   	        		alert("oups..");
+   	        	}
+   	        });
+           });
+       	
+       })
+	</script>
 }
 
-@layout("Demo app") {
-
-    <header>
-        <a href="@routes.Membership.register()" id="logo">Register</a>
-    </header>
-        
-    @helper.form(routes.Membership.authenticate) {
-		@if(flash.contains("errorLogin")) {
-			<p>Invalid username or password</p>
-		}
-    	<input type="email" name="email" placeholder="Email" value="">
-    	<input type="password" name="password" placeholder="Password">
-    	<button type="submit">Login</button>
-    }
-    
-    @helper.form(routes.Membership.logout) {
-    	<button type="submit">Logout</button>
-    }  
+@layout("Demo app")(head) {
     
     @if(flash.contains("registrationSuccess")) {
     	*** 1st visit ***
     }
-    <h1>Hello @fullName()</h1>
     
-    @if(member != null) {
-    	<textarea class="invitations" placeholder="bob@@example.com john@@example.com"></textarea>
+    @if(flash.contains("groupSuccess")) {
+    	Bienvenue dans le groupe : @flash.get("groupSuccess") !
+    }
+    
+    @if(member != null && groups.size() == 0 ) {
+    	<p>Create a new group :</p>
     	<input type="text" class="groupName" placeholder="group name" value="">
-    	<button class="addGroup" data-email="@member.email">Add a group</button>
+    	<br/>
+    	<textarea class="invitations" placeholder="bob@@example.com john@@example.com"></textarea>
+    	<br/>
+    	<button class="addGroup" data-email="@member.email">create</button>
     	<div id="groupAddResult"></div>
     }
 

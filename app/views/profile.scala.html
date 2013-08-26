@@ -1,0 +1,23 @@
+@(member: Member, groups: List[MGroup])
+
+@import helper._
+@import layouts._
+@import tags._
+
+@head = {}
+
+@layout( "Profile" )(head) {
+	
+    Profile of : @member.firstName  @member.lastName
+    @if( groups.size() > 0 ) {
+    	<p>
+	    	<b>Vos groupes</b>
+	    	<ul>
+		    @for(group <- groups ) {
+		    	<li>@group.name</li>
+		    }
+	    	</ul>
+	    </p>
+    }
+
+}

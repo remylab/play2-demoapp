@@ -1,7 +1,7 @@
 @(invit: Invitation , invited: Member, registerForm: Form[Group.AcceptModel])
 
 @import helper._
-@import macros._
+@import tags._
 
 <html>
     <head>
@@ -26,8 +26,8 @@
 		        @registerForm.globalError.message
             }
             
-           	<input type="hidden" name="groupId" value="@invit.group.id">	
-           	<input type="hidden" name="invitationId" value="@invit.id">	
+           	<input type="hidden" name="groupId" value="@invit.group.id">
+           	<input type="hidden" name="token" value="@invit.confirmationToken">
            	
             @if( invited != null ) {
             

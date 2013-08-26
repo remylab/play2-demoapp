@@ -38,4 +38,8 @@ public class MGroup extends Model {
         group.saveManyToManyAssociations("members");
         return group;
     }
+
+    public static List<MGroup> findInvolving(Member member) {
+        return find.where().eq("members.id", member.id).orderBy("id desc").findList();
+    }
 }

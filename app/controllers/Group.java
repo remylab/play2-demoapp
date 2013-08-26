@@ -23,7 +23,6 @@ public class Group extends ControllerExtended {
 
     public static class AcceptModel {
 
-        public Long invitationId;
         public Long groupId;
         public String email;
         public String firstName;
@@ -31,6 +30,7 @@ public class Group extends ControllerExtended {
         public String password;
         public String passwordval;
         public String newMember;
+        public String token;
     }
 
     /**
@@ -42,14 +42,18 @@ public class Group extends ControllerExtended {
         Form<AcceptModel> form = acceptForm.bindFromRequest();
 
         boolean createNewMember = false;
-        Member newMember = null;
         Member existingMember = null;
         MGroup group = MGroup.find.ref(form.get().groupId);
-        Invitation invit = Invitation.find.ref(form.get().invitationId);
 
         if (group == null) {
-            form.reject("groupId", "group not found");
+            return redirect(routes.Application.index());
         } else {
+
+            Invitation invit = Invitation.findInvitationByToken(group.id, form.get().token);
+
+            if (invit == null) {
+                return redirect(routes.Application.index());
+            }
 
             if (StringUtil.isEmpty(form.get().email)) {
                 form.reject("email", message("register.form.required"));
@@ -73,9 +77,13 @@ public class Group extends ControllerExtended {
                 }
 
             } else {
-                existingMember = Member.findByEmail(form.get().email);
-                if (Member.authenticate(form.get().email, form.get().password) == null) {
+                existingMember = Member.authenticate(form.get().email, form.get().password);
+                if (existingMember == null) {
                     form.reject("password", "password invalid");
+                } else {
+                    existingMember.active = true;
+                    existingMember.confirmationToken = null;
+                    existingMember.save();
                 }
             }
 
@@ -109,7 +117,6 @@ public class Group extends ControllerExtended {
                 return redirect(routes.Application.index());
             }
         }
-        return badRequest(views.html.index.render(Membership.getUser()));
     }
 
     /**
@@ -125,11 +132,10 @@ public class Group extends ControllerExtended {
 
         Invitation invit = Invitation.findInvitationByToken(id, token);
         if (invit != null) {
-            Member sender = invit.sender;
             Member invited = Member.findByEmail(invit.email);
             return ok(views.html.join.render(invit, invited, acceptForm));
         }
-        return badRequest(views.html.index.render(Membership.getUser()));
+        return redirect(routes.Application.index());
     }
 
     /**
@@ -164,7 +170,7 @@ public class Group extends ControllerExtended {
             MGroup group = MGroup.create(name, email);
             for (String invEmail : invitations) {
                 Invitation invit = Invitation.create(sender, group.id, invEmail);
-                if (invit != null) {
+                if (invit != null && !email.equals(invEmail)) {
                     emailsMap.put(invEmail, "http://" + request().host() + INVITATION_ROUTE + "/" + group.id + "/" + invit.confirmationToken);
                 }
             }
