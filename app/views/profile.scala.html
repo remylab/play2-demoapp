@@ -4,7 +4,31 @@
 @import layouts._
 @import tags._
 
-@head = {}
+@head = {
+	<script type="text/javascript">
+	
+	$(function(){
+
+		$("#showGroup").bind('click',function() {
+		
+			jsRoutes.controllers.Group.show().ajax({
+				context: this,
+				data:{
+					groupId:$('input:radio[name=group]:checked').val()
+				},
+				success:function(data, textStatus, jqXHR) {
+					$('#showGroupResult').html(data);
+				},
+				error:function() {
+					alert("oups..");
+				}
+			});
+			
+		});
+       	
+	});
+	</script>
+}
 
 @layout( "Profile" )(head) {
 	
@@ -12,12 +36,12 @@
     @if( groups.size() > 0 ) {
     	<p>
 	    	<b>Vos groupes</b>
-	    	<ul>
 		    @for(group <- groups ) {
-		    	<li>@group.name</li>
+		    	<input type="radio" name="group" value="@group.id">@group.name</input>
 		    }
-	    	</ul>
 	    </p>
+	    <button id="showGroup">show members</button>
+    	<div id="showGroupResult"></div>
     }
 
 }

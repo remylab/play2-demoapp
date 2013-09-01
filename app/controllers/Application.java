@@ -33,7 +33,8 @@ public class Application extends ControllerExtended {
     public static Result jsRoutes() {
         response().setContentType("text/javascript");
         return ok(Routes.javascriptRouter("jsRoutes",
-                controllers.routes.javascript.Group.add()
+                controllers.routes.javascript.Group.add(),
+                controllers.routes.javascript.Group.show()
                 ));
 
     }

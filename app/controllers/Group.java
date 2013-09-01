@@ -144,6 +144,28 @@ public class Group extends ControllerExtended {
      * 
      * @return
      */
+    public static Result show() {
+        ArrayList<String> errors = new ArrayList<String>();
+
+        String sGroupId = dynForm.bindFromRequest().get("groupId");
+
+        if (StringUtil.isEmpty(sGroupId)) {
+            errors.add("missing group id");
+        }
+
+        if (errors.size() > 0) {
+            return badRequest();
+        } else {
+            return ok(views.html.ajax.showgroup.render("show group : " + sGroupId, null));
+        }
+    }
+
+    /**
+     * An active member create a group and send invitations to a list of emails
+     * System create invitation records and fire email with confirmation URL
+     * 
+     * @return
+     */
     public static Result add() {
         ArrayList<String> errors = new ArrayList<String>();
 
@@ -175,7 +197,7 @@ public class Group extends ControllerExtended {
                 }
             }
 
-            return ok(views.html.ajax.group.render(name, emailsMap));
+            return ok(views.html.ajax.newgroup.render(name, emailsMap));
         }
     }
 }

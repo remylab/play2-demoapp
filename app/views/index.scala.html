@@ -7,9 +7,10 @@
 
 @head = {
 	<script type="text/javascript">
+	
        $(function(){
 
-           $(".addGroup").bind('click',function() {
+           $("#newGroup").bind('click',function() {
            	var email = $(this).attr('data-email');
            	var name = $('.groupName').val();
            	var invitations = $('.invitations').val();
@@ -49,7 +50,7 @@
     	<br/>
     	<textarea class="invitations" placeholder="bob@@example.com john@@example.com"></textarea>
     	<br/>
-    	<button class="addGroup" data-email="@member.email">create</button>
+    	<button id="newGroup" data-email="@member.email">create</button>
     	<div id="groupAddResult"></div>
     }
 
