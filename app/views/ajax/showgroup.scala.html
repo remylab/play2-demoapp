@@ -1,4 +1,6 @@
-@(test: String, members: List[Member])
+@(members: List[Member])
 <p>
-	@test
+    @for(member <- members ) {
+    	@member.email<br/>
+    }
 </p>

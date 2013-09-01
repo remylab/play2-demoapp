@@ -144,19 +144,23 @@ public class Group extends ControllerExtended {
      * 
      * @return
      */
-    public static Result show() {
+    public static Result show(Long id) {
+        Member member = Membership.getUser();
+        if (member == null) {
+            return badRequest();
+        }
         ArrayList<String> errors = new ArrayList<String>();
 
-        String sGroupId = dynForm.bindFromRequest().get("groupId");
-
-        if (StringUtil.isEmpty(sGroupId)) {
-            errors.add("missing group id");
+        MGroup group = MGroup.getWithMember(id, member);
+        if (group == null) {
+            errors.add("member not allowed");
         }
 
         if (errors.size() > 0) {
             return badRequest();
         } else {
-            return ok(views.html.ajax.showgroup.render("show group : " + sGroupId, null));
+
+            return ok(views.html.ajax.showgroup.render(group.members));
         }
     }
 
@@ -167,6 +171,10 @@ public class Group extends ControllerExtended {
      * @return
      */
     public static Result add() {
+        Member member = Membership.getUser();
+        if (member == null) {
+            return badRequest();
+        }
         ArrayList<String> errors = new ArrayList<String>();
 
         String email = dynForm.bindFromRequest().get("email");

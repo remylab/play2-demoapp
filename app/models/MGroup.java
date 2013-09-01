@@ -42,4 +42,8 @@ public class MGroup extends Model {
     public static List<MGroup> findInvolving(Member member) {
         return find.where().eq("members.id", member.id).orderBy("id desc").findList();
     }
+
+    public static MGroup getWithMember(Long groupId, Member member) {
+        return find.where().eq("id", groupId).where().eq("members.id", member.id).findUnique();
+    }
 }

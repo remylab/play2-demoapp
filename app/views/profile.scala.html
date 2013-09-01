@@ -11,10 +11,9 @@
 
 		$("#showGroup").bind('click',function() {
 		
-			jsRoutes.controllers.Group.show().ajax({
+			jsRoutes.controllers.Group.show($('input:radio[name=group]:checked').val()).ajax({
 				context: this,
 				data:{
-					groupId:$('input:radio[name=group]:checked').val()
 				},
 				success:function(data, textStatus, jqXHR) {
 					$('#showGroupResult').html(data);
