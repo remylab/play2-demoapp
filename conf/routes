@@ -17,6 +17,7 @@ POST 	/group/accept					controllers.Group.accept()
 # JS ROUTES
 POST    /newgroup                		controllers.Group.add()
 GET    	/group/:id                		controllers.Group.show(id: Long)
+GET    	/invit/:id                		controllers.Group.invite(id: Long)
 GET     /public/javascript/routes       controllers.Application.jsRoutes()
 
 # Map static resources from the /public folder to the /assets URL path

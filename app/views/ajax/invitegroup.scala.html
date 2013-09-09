@@ -1,0 +1,9 @@
+@(name: String, emails:Map[String, String])
+<p>
+	Une invitation pour rejoindre le group "@name", a été envoyée aux courriels suivant :
+	<ul>
+	@for((key, value) <- emails) {
+	  <li>@key : @value</li>
+	}
+	</ul>
+</p>

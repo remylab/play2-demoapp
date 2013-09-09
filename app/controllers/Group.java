@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Result;
+import play.mvc.Security;
 import tools.StringUtil;
 
 public class Group extends ControllerExtended {
@@ -144,13 +145,11 @@ public class Group extends ControllerExtended {
      * 
      * @return
      */
+    @Security.Authenticated(AjaxSecured.class)
     public static Result show(Long id) {
-        Member member = Membership.getUser();
-        if (member == null) {
-            return badRequest();
-        }
         ArrayList<String> errors = new ArrayList<String>();
 
+        Member member = Membership.getUser();
         MGroup group = MGroup.getWithMember(id, member);
         if (group == null) {
             errors.add("member not allowed");
@@ -170,22 +169,15 @@ public class Group extends ControllerExtended {
      * 
      * @return
      */
+    @Security.Authenticated(AjaxSecured.class)
     public static Result add() {
-        Member member = Membership.getUser();
-        if (member == null) {
-            return badRequest();
-        }
         ArrayList<String> errors = new ArrayList<String>();
 
-        String email = dynForm.bindFromRequest().get("email");
         String name = dynForm.bindFromRequest().get("name");
         String sInvitations = dynForm.bindFromRequest().get("invitations");
 
         String[] invitations = sInvitations.split(" ");
 
-        if (StringUtil.isEmpty(email)) {
-            errors.add("no email");
-        }
         if (StringUtil.isEmpty(name)) {
             errors.add("no name");
         }
@@ -193,19 +185,51 @@ public class Group extends ControllerExtended {
         if (errors.size() > 0) {
             return badRequest();
         } else {
-
-            HashMap<String, String> emailsMap = new HashMap<String, String>();
-            Member sender = Member.findByEmail(email);
-
-            MGroup group = MGroup.create(name, email);
-            for (String invEmail : invitations) {
-                Invitation invit = Invitation.create(sender, group.id, invEmail);
-                if (invit != null && !email.equals(invEmail)) {
-                    emailsMap.put(invEmail, "http://" + request().host() + INVITATION_ROUTE + "/" + group.id + "/" + invit.confirmationToken);
-                }
-            }
-
-            return ok(views.html.ajax.newgroup.render(name, emailsMap));
+            Member sender = Membership.getUser();
+            MGroup group = MGroup.create(name, sender.email);
+            return ok(views.html.ajax.newgroup.render(name, sendInvitations(invitations, group, sender)));
         }
+    }
+
+    /**
+     * An active member send invitations to an existing group to a list of
+     * emails System create invitation records and fire email with confirmation
+     * URL
+     * 
+     * @return
+     */
+    @Security.Authenticated(AjaxSecured.class)
+    public static Result invite(Long id) {
+        ArrayList<String> errors = new ArrayList<String>();
+
+        Member member = Membership.getUser();
+        MGroup group = MGroup.getWithMember(id, member);
+        if (group == null) {
+            errors.add("member not allowed");
+        }
+
+        String sInvitations = dynForm.bindFromRequest().get("invitations");
+
+        String[] invitations = sInvitations.split(" ");
+
+        if (errors.size() > 0) {
+            return badRequest();
+        } else {
+
+            return ok(views.html.ajax.invitegroup.render(group.name, sendInvitations(invitations, group, member)));
+        }
+    }
+
+    private static HashMap<String, String> sendInvitations(String[] invitations, MGroup group, Member sender) {
+
+        HashMap<String, String> emailsMap = new HashMap<String, String>();
+
+        for (String invEmail : invitations) {
+            Invitation invit = Invitation.create(sender, group.id, invEmail);
+            if (invit != null && !(sender.email).equals(invEmail)) {
+                emailsMap.put(invEmail, "http://" + request().host() + INVITATION_ROUTE + "/" + group.id + "/" + invit.confirmationToken);
+            }
+        }
+        return emailsMap;
     }
 }

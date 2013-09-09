@@ -11,13 +11,11 @@
        $(function(){
 
            $("#newGroup").bind('click',function() {
-           	var email = $(this).attr('data-email');
            	var name = $('.groupName').val();
            	var invitations = $('.invitations').val();
    	        jsRoutes.controllers.Group.add().ajax({
    	        	context: this,
    	        	data:{
-   	        		email:email,
    	        		name:name,
    	        		invitations:invitations
    	        	},
@@ -50,7 +48,7 @@
     	<br/>
     	<textarea class="invitations" placeholder="bob@@example.com john@@example.com"></textarea>
     	<br/>
-    	<button id="newGroup" data-email="@member.email">create</button>
+    	<button id="newGroup" >create</button>
     	<div id="groupAddResult"></div>
     }
 

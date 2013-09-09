@@ -10,10 +10,33 @@
 	$(function(){
 
 		$("#showGroup").bind('click',function() {
+			
+			$(".result").html("");
 		
 			jsRoutes.controllers.Group.show($('input:radio[name=group]:checked').val()).ajax({
 				context: this,
 				data:{
+				},
+				success:function(data, textStatus, jqXHR) {
+					$('#showGroupResult').html(data);
+				},
+				error:function() {
+					alert("oups..");
+				}
+			});
+			
+		});
+		
+		$("#invitGroup").bind('click',function() {
+			
+			$(".result").html("");
+
+           	var invitations = $('.invitations').val();
+		
+			jsRoutes.controllers.Group.invite($('input:radio[name=group]:checked').val()).ajax({
+				context: this,
+				data:{
+					invitations:invitations
 				},
 				success:function(data, textStatus, jqXHR) {
 					$('#showGroupResult').html(data);
@@ -35,12 +58,15 @@
     @if( groups.size() > 0 ) {
     	<p>
 	    	<b>Vos groupes</b>
-		    @for(group <- groups ) {
-		    	<input type="radio" name="group" value="@group.id">@group.name</input>
+		    @for((group,index) <- groups.zipWithIndex ) {
+		    	<input type="radio" name="group" value="@group.id" @if(index==0){checked}>@group.name</input>
 		    }
 	    </p>
-	    <button id="showGroup">show members</button>
-    	<div id="showGroupResult"></div>
+	    <button id="showGroup">show members</button><button id="invitGroup">invit people</button>
+	    <br/>	    
+    	<textarea class="invitations" placeholder="bob@@example.com john@@example.com"></textarea>
+    	<div class="result" id="showGroupResult"></div>
+    	<div class="result" id="invitResult"></div>
     }
 
 }

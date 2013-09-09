@@ -34,7 +34,8 @@ public class Application extends ControllerExtended {
         response().setContentType("text/javascript");
         return ok(Routes.javascriptRouter("jsRoutes",
                 controllers.routes.javascript.Group.add(),
-                controllers.routes.javascript.Group.show()
+                controllers.routes.javascript.Group.show(),
+                controllers.routes.javascript.Group.invite()
                 ));
 
     }
