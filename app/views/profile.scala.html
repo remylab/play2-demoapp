@@ -55,6 +55,9 @@
 @layout( "Profile" )(head) {
 	
     Profile of : @member.firstName  @member.lastName
+    
+    <p><b><a href="@routes.Items.index()">Vos items</a></b></p>
+    
     @if( groups.size() > 0 ) {
     	<p>
 	    	<b>Vos groupes</b>

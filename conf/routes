@@ -9,6 +9,8 @@ POST    /register                  		controllers.Membership.addMember()
 POST    /login                  		controllers.Membership.authenticate()
 POST    /logout                  		controllers.Membership.logout()
 GET     /profile                  		controllers.Membership.profile()
+GET     /items                  		controllers.Items.index()
+
 
 GET     /confirmation/:email/:token 	controllers.Membership.confirmation(email :String, token :String)	
 GET     /group/invitation/:id/:token 	controllers.Group.invitation(id :Long, token :String) 

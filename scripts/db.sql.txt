@@ -4,5 +4,5 @@ psql -U postgres
 psql -U meebadmin -d meeblio
 
 */
-
+drop database meeblio; drop user meebadmin;  
 create database meeblio; create user meebadmin with password 'test'; grant all privileges on database meeblio to meebadmin;

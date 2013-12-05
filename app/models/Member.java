@@ -1,8 +1,13 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -29,6 +34,8 @@ public class Member extends Model {
     public String password;
     public boolean active;
     public String confirmationToken;
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    public List<Item> items = new ArrayList<Item>();
 
     public Member(String email, String firstName, String lastName, String password) {
         this.email = email;
