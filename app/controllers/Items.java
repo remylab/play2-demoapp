@@ -15,7 +15,10 @@ public class Items extends ControllerExtended {
 
     @Security.Authenticated(Secured.class)
     public static Result index() {
-        return ok(views.html.items.render());
+
+        Member member = Membership.getUser();
+
+        return ok(views.html.items.render(Item.getItems(member.id)));
     }
 
     /**
@@ -38,7 +41,7 @@ public class Items extends ControllerExtended {
         if (errors.size() > 0) {
             return badRequest();
         } else {
-            member.items.add(Item.create(title, description));
+            member.items.add(Member.addItem(member, title, description));
             return ok();
         }
     }

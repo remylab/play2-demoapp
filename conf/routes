@@ -17,6 +17,7 @@ GET     /group/invitation/:id/:token 	controllers.Group.invitation(id :Long, tok
 POST 	/group/accept					controllers.Group.accept()	
 
 # JS ROUTES
+POST    /items/add                		controllers.Items.add()
 POST    /newgroup                		controllers.Group.add()
 GET    	/group/:id                		controllers.Group.show(id: Long)
 GET    	/invit/:id                		controllers.Group.invite(id: Long)

@@ -1,14 +1,50 @@
-@()
+@(items: List[Item])
 
 @import helper._
 @import layouts._
 @import tags._
 
 @head = {
+	<script type="text/javascript">
+	
+	$(function(){
+
+		$("#addItem").bind('click',function() {
+			
+		
+			jsRoutes.controllers.Items.add().ajax({
+				context: this,
+				data:{
+					title:$("#title").val(),
+					description:$("#description").val()
+				},
+				success:function(data, textStatus, jqXHR) {
+					alert("done !");
+				},
+				error:function() {
+					alert("oups..");
+				}
+			});
+			
+		});
+		
+       	
+	});
+	</script>
 }
 
 @layout( "Items" )(head) {
+
+	<h3>Ajouter un item</h3>
+	<input type="text" id="title" name="title" /><br/>
+	<input type="text" id="description" name="description" /><br/>
+	<button id="addItem">go !</button>
 	
-    Hello items
+	<h3>Vos items</h3>
+	<ul>
+    @for(item <- items ) {
+    	<li>@item.title</li>
+    }
+	</ul>
 
 }

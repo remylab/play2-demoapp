@@ -82,7 +82,12 @@ public class Member extends Model {
         return StringUtil.encrypt("SHA1", s, passwordSeed);
     }
 
-    public static String getTest() {
-        return "test";
+    public static Item addItem(Member member, String title, String description) {
+        Item item = new Item(title, description);
+        member.items.add(item);
+        System.out.println("hello member : " + member.email);
+        member.saveManyToManyAssociations("items");
+        member.save();
+        return item;
     }
 }

@@ -27,10 +27,8 @@ public class Item extends Model {
         this.description = description;
     }
 
-    public static Item create(String title, String description) {
-        Item item = new Item(title, description);
-        item.save();
-        return item;
+    public static List<Item> getItems(Long memberId) {
+        return Item.find.where().eq("member_id", memberId).orderBy("id desc").findList();
     }
 
 }

@@ -35,7 +35,8 @@ public class Application extends ControllerExtended {
         return ok(Routes.javascriptRouter("jsRoutes",
                 controllers.routes.javascript.Group.add(),
                 controllers.routes.javascript.Group.show(),
-                controllers.routes.javascript.Group.invite()
+                controllers.routes.javascript.Group.invite(),
+                controllers.routes.javascript.Items.add()
                 ));
 
     }
