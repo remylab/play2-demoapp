@@ -15,7 +15,12 @@ import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.mvc.Http.Request;
 import tools.StringUtil;
+
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.SqlQuery;
+import com.avaje.ebean.SqlRow;
 
 @Entity
 public class Member extends Model {
@@ -85,9 +90,31 @@ public class Member extends Model {
     public static Item addItem(Member member, String title, String description) {
         Item item = new Item(title, description);
         member.items.add(item);
-        System.out.println("hello member : " + member.email);
         member.saveManyToManyAssociations("items");
         member.save();
         return item;
+    }
+
+    public static List<Item> getItems(Member member, Request request) {
+        List<Item> ret = new ArrayList<Item>();
+
+        int nbItems = 10;
+        int offset = 0;
+
+        String sql = "select * from item a where exists (select 1 from mgroup_member b where"
+                + " a.member_id = b.member_id and exists (select 1 from mgroup_member c where c.member_id = :member_id and c.mgroup_id = b.mgroup_id) ) and a.member_id != :member_id"
+                + " offset " + offset + " rows fetch next " + nbItems + " rows only";
+
+        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+        sqlQuery.setParameter("member_id", member.id);
+        List<SqlRow> rows = sqlQuery.findList();
+
+        System.out.println("row.size : " + rows.size());
+
+        for (SqlRow row : rows) {
+            Item i = new Item(row.getString("title"), row.getString("description"));
+            ret.add(i);
+        }
+        return ret;
     }
 }

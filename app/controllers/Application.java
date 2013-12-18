@@ -3,6 +3,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Item;
 import models.MGroup;
 import models.Member;
 import play.Routes;
@@ -16,10 +17,15 @@ public class Application extends ControllerExtended {
 
         Member member = Membership.getUser();
         List<MGroup> groups = new ArrayList<MGroup>();
+        List<Item> items = new ArrayList<Item>();
+
         if (member != null) {
             groups = MGroup.findInvolving(member);
+            if (groups.size() > 0) {
+                items = Member.getItems(member, request());
+            }
         }
-        return ok(index.render(member, groups));
+        return ok(index.render(member, groups, items));
     }
 
     public static void onLogin(String email) {

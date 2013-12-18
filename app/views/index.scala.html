@@ -1,9 +1,9 @@
-@(member: Member, groups: List[MGroup])
+@(member: Member, groups: List[MGroup], items: List[Item])
 
 @import tools._
 @import layouts._
 @import tags._
-
+@import tags_items._
 
 @head = {
 	<script type="text/javascript">
@@ -42,7 +42,7 @@
     	Bienvenue dans le groupe : @flash.get("groupSuccess") !
     }
     
-    @if(member != null && groups.size() == 0 ) {
+    @if(member != null ) {
     	<p>Create a new group :</p>
     	<input type="text" class="groupName" placeholder="group name" value="">
     	<br/>
@@ -51,6 +51,18 @@
     	<button id="newGroup" >create</button>
     	<div id="groupAddResult"></div>
     }
+    
+    <p>
+    @if(member != null) {
+    
+    	Liste des items de vos groupes
+    	<ul>
+	    @for(it <- items ) {
+	    	@item(it)
+	    }
+		</ul>
+    }
+    </p>
 
     
 }

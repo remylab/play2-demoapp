@@ -3,6 +3,7 @@
 @import helper._
 @import layouts._
 @import tags._
+@import tags_items._
 
 @head = {
 	<script type="text/javascript">
@@ -19,7 +20,7 @@
 					description:$("#description").val()
 				},
 				success:function(data, textStatus, jqXHR) {
-					alert("done !");
+					window.location = window.location;
 				},
 				error:function() {
 					alert("oups..");
@@ -42,8 +43,8 @@
 	
 	<h3>Vos items</h3>
 	<ul>
-    @for(item <- items ) {
-    	<li>@item.title</li>
+    @for(it <- items ) {
+    	@item(it)
     }
 	</ul>
 
