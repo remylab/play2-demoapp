@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 import play.db.ebean.Model;
+import tools.DateUtil;
 
 @Entity
 public class Item extends Model {
@@ -22,9 +23,13 @@ public class Item extends Model {
     @ManyToMany(cascade = CascadeType.REMOVE)
     public List<Tag> tags = new ArrayList<Tag>();
 
+    public Long creationTime;
+
     public Item(String title, String description) {
         this.title = title;
         this.description = description;
+
+        this.creationTime = DateUtil.getTimeNow();
     }
 
     public static List<Item> getItems(Long memberId) {

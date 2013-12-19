@@ -1,4 +1,4 @@
-@(invit: Invitation , invited: Member, registerForm: Form[Group.AcceptModel])
+@(invit: Invitation , invited: Member, registerForm: Form[Group.AcceptModel], members: List[Member])
 
 @import helper._
 @import tags._
@@ -66,6 +66,13 @@
             }
                
 			<p><button type="submit">submit</button></p>
+			
+			<p>
+			Quelques membres de ce groupe : <br/>
+			@for(member <- members) {
+				@member.firstName @member.lastName /  
+			}
+			</p>
                
        }
     	

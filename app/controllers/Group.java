@@ -1,7 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import models.Invitation;
 import models.MGroup;
@@ -95,7 +95,7 @@ public class Group extends ControllerExtended {
 
             if (form.hasErrors()) {
                 form.reject(message("register.form.invalid"));
-                return badRequest(views.html.join.render(invit, existingMember, form));
+                return badRequest(views.html.join.render(invit, existingMember, form, Member.membersFromGroup(invit.group.id, 0, 10)));
             } else {
 
                 Member invitedMember = existingMember;
@@ -109,13 +109,18 @@ public class Group extends ControllerExtended {
 
                 if (invitedMember == null) {
                     form.reject(message("register.form.invalid"));
-                    return badRequest(views.html.join.render(invit, existingMember, form));
+                    return badRequest(views.html.join.render(invit, existingMember, form, Member.membersFromGroup(invit.group.id, 0, 10)));
                 }
 
                 MGroup.add(group.id, invitedMember);
                 Application.onLogin(invitedMember.email);
 
                 flash("groupSuccess", group.name);
+
+                // invalidate invitation link after processing it
+                invit.confirmationToken = null;
+                invit.save();
+
                 return redirect(routes.Application.index());
             }
         }
@@ -135,7 +140,7 @@ public class Group extends ControllerExtended {
         Invitation invit = Invitation.findInvitationByToken(id, token);
         if (invit != null) {
             Member invited = Member.findByEmail(invit.email);
-            return ok(views.html.join.render(invit, invited, acceptForm));
+            return ok(views.html.join.render(invit, invited, acceptForm, Member.membersFromGroup(invit.group.id, 0, 10)));
         }
         return redirect(routes.Application.index());
     }
@@ -221,21 +226,23 @@ public class Group extends ControllerExtended {
         }
     }
 
-    private static HashMap<String, String> sendInvitations(String[] invitations, MGroup group, Member sender) {
+    private static List<String> sendInvitations(String[] invitations, MGroup group, Member sender) {
 
-        HashMap<String, String> emailsMap = new HashMap<String, String>();
+        ArrayList<String> emails = new ArrayList<String>();
 
         for (String invEmail : invitations) {
             Invitation invit = Invitation.create(sender, group.id, invEmail);
 
             if (invit != null && !(sender.email).equals(invEmail)) {
                 String link = "http://" + request().host() + INVITATION_ROUTE + "/" + group.id + "/" + invit.confirmationToken;
-                emailsMap.put(invEmail, link);
+                emails.add(invEmail);
                 String body = views.html.mails.invitation.render(sender, group.name, link).body();
                 MailUtil.sendMailHtml("invitation meeblio", invEmail, "noreply@meeblio.com", body);
             }
 
         }
-        return emailsMap;
+        return emails;
+
     }
+
 }

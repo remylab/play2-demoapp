@@ -9,6 +9,7 @@ create table invitation (
   email                     varchar(255),
   confirmation_token        varchar(255),
   sender_id                 bigint,
+  creation_time             bigint,
   constraint pk_invitation primary key (id))
 ;
 
@@ -17,6 +18,7 @@ create table item (
   member_id                 bigint not null,
   title                     varchar(255),
   description               varchar(255),
+  creation_time             bigint,
   constraint pk_item primary key (id))
 ;
 
@@ -34,6 +36,7 @@ create table member (
   password                  varchar(255),
   active                    boolean,
   confirmation_token        varchar(255),
+  creation_time             bigint,
   constraint uq_member_email unique (email),
   constraint pk_member primary key (id))
 ;

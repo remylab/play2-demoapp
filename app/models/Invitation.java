@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import play.db.ebean.Model;
+import tools.DateUtil;
 
 @Entity
 public class Invitation extends Model {
@@ -23,11 +24,15 @@ public class Invitation extends Model {
     @OneToOne
     public Member sender;
 
+    public Long creationTime;
+
     public Invitation(Member member, MGroup group, String email) {
         this.group = group;
         this.email = email;
         this.confirmationToken = RandomStringUtils.randomAlphanumeric(40);
         this.sender = member; // member who sent the invitation
+
+        this.creationTime = DateUtil.getTimeNow();
     }
 
     public static Invitation create(Member member, Long groupId, String email) {

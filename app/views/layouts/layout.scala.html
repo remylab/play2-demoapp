@@ -35,6 +35,7 @@
     	    	
     		    @helper.form(routes.Membership.logout) {
     		    	<a href="@routes.Membership.profile()" >@fullName()</a><button type="submit">Logout</button>
+    		    	<br/>(created : @DateUtil.getDate(Chelper.member().creationTime) )
     		    } 
     		    
     	    } else {
