@@ -4,7 +4,7 @@ import play.Project._
 
 object ApplicationBuild extends Build {
 
-  val appName         = "demo"
+  val appName         = "meeblio"
   val appVersion      = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
@@ -12,7 +12,8 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "org.apache.commons" % "commons-lang3" % "3.1"
+    "org.apache.commons" % "commons-lang3" % "3.1", 
+    "com.typesafe" %% "play-plugins-mailer" % "2.1-RC2"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

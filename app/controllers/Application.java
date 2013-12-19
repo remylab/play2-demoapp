@@ -8,7 +8,6 @@ import models.MGroup;
 import models.Member;
 import play.Routes;
 import play.mvc.Result;
-import views.html.index;
 
 public class Application extends ControllerExtended {
 
@@ -25,7 +24,8 @@ public class Application extends ControllerExtended {
                 items = Member.getItems(member, request());
             }
         }
-        return ok(index.render(member, groups, items));
+
+        return ok(views.html.index.render(member, groups, items));
     }
 
     public static void onLogin(String email) {

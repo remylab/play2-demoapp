@@ -1,7 +1,68 @@
-@(message: String)
+@(member: Member, groups: List[MGroup], items: List[Item])
 
-@main("Demo app") {
+@import tools._
+@import layouts._
+@import tags._
+@import tags_items._
+
+@head = {
+	<script type="text/javascript">
+	
+       $(function(){
+
+           $("#newGroup").bind('click',function() {
+           	var name = $('.groupName').val();
+           	var invitations = $('.invitations').val();
+   	        jsRoutes.controllers.Group.add().ajax({
+   	        	context: this,
+   	        	data:{
+   	        		name:name,
+   	        		invitations:invitations
+   	        	},
+   	        	success:function(data, textStatus, jqXHR) {
+   	        		$('#groupAddResult').html(data);
+   	        	},
+   	        	error:function() {
+   	        		alert("oups..");
+   	        	}
+   	        });
+           });
+       	
+       })
+	</script>
+}
+
+@layout("Demo app")(head) {
     
-    <h1>Hello demo!</h1>
+    @if(flash.contains("registrationSuccess")) {
+    	*** 1st visit ***
+    }
+    
+    @if(flash.contains("groupSuccess")) {
+    	Bienvenue dans le groupe : @flash.get("groupSuccess") !
+    }
+    
+    @if(member != null ) {
+    	<p>Create a new group :</p>
+    	<input type="text" class="groupName" placeholder="group name" value="">
+    	<br/>
+    	<textarea class="invitations" placeholder="bob@@example.com john@@example.com"></textarea>
+    	<br/>
+    	<button id="newGroup" >create</button>
+    	<div id="groupAddResult"></div>
+    }
+    
+    <p>
+    @if(member != null) {
+    
+    	Liste des items de vos groupes
+    	<ul>
+	    @for(it <- items ) {
+	    	@item(it)
+	    }
+		</ul>
+    }
+    </p>
+
     
 }

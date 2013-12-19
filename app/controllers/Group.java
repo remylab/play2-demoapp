@@ -13,6 +13,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Result;
 import play.mvc.Security;
+import tools.MailUtil;
 import tools.StringUtil;
 
 public class Group extends ControllerExtended {
@@ -226,9 +227,14 @@ public class Group extends ControllerExtended {
 
         for (String invEmail : invitations) {
             Invitation invit = Invitation.create(sender, group.id, invEmail);
+
             if (invit != null && !(sender.email).equals(invEmail)) {
-                emailsMap.put(invEmail, "http://" + request().host() + INVITATION_ROUTE + "/" + group.id + "/" + invit.confirmationToken);
+                String link = "http://" + request().host() + INVITATION_ROUTE + "/" + group.id + "/" + invit.confirmationToken;
+                emailsMap.put(invEmail, link);
+                String body = views.html.mails.invitation.render(sender, group.name, link).body();
+                MailUtil.sendMailHtml("invitation meeblio", invEmail, "noreply@meeblio.com", body);
             }
+
         }
         return emailsMap;
     }
