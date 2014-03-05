@@ -116,6 +116,7 @@ public class Member extends Model {
 
         for (SqlRow row : rows) {
             Item i = new Item(row.getString("title"), row.getString("description"));
+            i.id = row.getLong("id");
             ret.add(i);
         }
         return ret;

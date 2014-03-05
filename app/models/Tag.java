@@ -8,7 +8,7 @@ import play.db.ebean.Model;
 
 @Entity
 public class Tag extends Model {
-    public static Finder<Long, Item> find = new Finder<Long, Item>(Long.class, Item.class);
+    public static Finder<Long, Tag> find = new Finder<Long, Tag>(Long.class, Tag.class);
 
     @Id
     public long id;
