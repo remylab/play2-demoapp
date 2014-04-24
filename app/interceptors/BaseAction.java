@@ -6,14 +6,16 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import controllers.Membership;
+import play.mvc.SimpleResult;
+import play.libs.F;
 
 public class BaseAction extends Action.Simple {
-
+    
     public static String MEMBER = "BaseAction.member";
     public static String GROUPS = "BaseAction.groups";
 
     @Override
-    public Result call(Context ctx) throws Throwable {
+    public F.Promise<SimpleResult> call(Context ctx) throws Throwable {
 
         Member member = Membership.getUser();
 
